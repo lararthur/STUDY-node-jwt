@@ -1,6 +1,20 @@
 const Usuario = require('./usuarios-modelo');
 const { InvalidArgumentError, InternalServerError } = require('../erros');
 
+const jwt = require('jsonwebtoken');
+
+function criaTokenJWT(usuario) {
+  const payload = {
+    id: usuario.id
+  };
+  
+  // aqui estamos gerando o token.
+  // claro que essa senha secreta não deve ser uma string tão simples assim
+  // e também seria mehlor guardá-la em um lugar mais seguro, tipo um arquivo de environment?
+  const token = jwt.sign(payload, 'senha-secreta');
+  return token;
+}
+
 module.exports = {
   adiciona: async (req, res) => {
     const { nome, email, senha } = req.body;
@@ -28,6 +42,17 @@ module.exports = {
   },
 
   login: (req,res) => {
+    /* o req.user passado para a nossa função de criar o token foi disponibilizado aqui após
+    o passport.authenticate() - aquele chamado lá na rota - foi finalizado.
+    É o mesmo usuário devolvido na nossa estratégia local. */
+    const token = criaTokenJWT(req.user);
+    // de posse do token, podemos mandar ele de volta para o cliente.
+    // porém, não é recomendável mandá-lo no body da resposta
+    // sendo assim, o melhor é mandar no cabeçalho de authorization:
+    res.set('Authorization', token);
+    // uma observação sobre o status 204:
+    // normalmente quando mandado, significa que, não só a resposta é uma página em branco,
+    // mas, também, que os cabeçalhos podem ser úteis. (aqui, estamos mandando o token no cabeçalho)
     res.status(204).send();
   },
 
