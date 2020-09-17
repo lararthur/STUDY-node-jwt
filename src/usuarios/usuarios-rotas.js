@@ -5,7 +5,7 @@ module.exports = app => {
   app
     .route('/usuario/login')
     .post(
-      // esse método da autenticação irá executar nossa estratégia definida no commit anterior
+      // esse método da autenticação irá executar nossa estratégia de login, definida no estrategias-autenticacao.js
       passport.authenticate('local', { session: false }),
       usuariosControlador.login
     );
@@ -14,5 +14,11 @@ module.exports = app => {
     .post(usuariosControlador.adiciona)
     .get(usuariosControlador.lista);
 
-  app.route('/usuario/:id').delete(usuariosControlador.deleta);
+  app
+    .route('/usuario/:id')
+    .delete(
+      // esse método da autenticação irá executar nossa estratégia de tokens, definida no estrategias-autenticacao.js
+      passport.authenticate('bearer', { session: false }),
+      usuariosControlador.deleta
+    );
 };
