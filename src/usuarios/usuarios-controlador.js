@@ -8,10 +8,12 @@ function criaTokenJWT(usuario) {
     id: usuario.id
   };
   
-  // aqui estamos gerando o token.
-  // claro que essa senha secreta não deve ser uma string tão simples assim
-  // e também seria mehlor guardá-la em um lugar mais seguro, tipo um arquivo de environment?
-  const token = jwt.sign(payload, 'senha-secreta');
+  // para utilizar uma senha secreta mais confiável, podemos utilizar um proprio modulo do node chamado 'crypto'
+  // basta digitar no terminal:
+  // node -e "console.log(require('crypto').randomBytes(256).toString('base64'))"
+
+  // mas esta nova senha estamos guardando no arquivo .env, sendo que aqui utilizamos o 'process' fornecido pelo dotenv.
+  const token = jwt.sign(payload, process.env.CHAVE_JWT);
   return token;
 }
 
