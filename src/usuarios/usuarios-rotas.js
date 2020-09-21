@@ -1,6 +1,5 @@
 const usuariosControlador = require('./usuarios-controlador');
 const middlewaresAutenticacao = require('./middlewares-autenticacao');
-const passport = require('passport');
 
 module.exports = app => {
   app
@@ -18,7 +17,7 @@ module.exports = app => {
     .route('/usuario/:id')
     .delete(
       // esse método da autenticação irá executar nossa estratégia de tokens, definida no estrategias-autenticacao.js
-      passport.authenticate('bearer', { session: false }),
+      middlewaresAutenticacao.bearer,
       usuariosControlador.deleta
     );
 };

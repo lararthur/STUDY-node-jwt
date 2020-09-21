@@ -33,5 +33,34 @@ module.exports = {
                 return next();
             }
         )(req, res, next);
+    },
+
+    bearer: (req, res, next) => {
+        passport.authenticate(
+            'bearer',
+            { session: false },
+            (erro, usuario, info) => {
+
+                // segundo a documentação do JWT, os possíveis erros são gerados no jwt.verify(),
+                // que vão disparar em casos de tokens mal-formatados ou assinaturas inválidas.
+                // esses erros retornam aqui através de "JsonWebTokenError".
+                if(erro && erro.name === 'JsonWebTokenError') {
+                    return res.status(401).json({ erro: erro.message });
+                }
+
+                // aqui é um erro que não prevemos / não estamos tratando / não previmos. retornar 'genérico' erro 500 :(
+                if(erro) {
+                    return res.status(500).json({ erro: erro.message })
+                }
+
+                if(!usuario) {
+                    return res.status(401).json();
+                }
+
+                // aqui deu tudo certo :)
+                req.user = usuario;
+                return next();
+            },
+        )(req, res, next)
     }
 };
