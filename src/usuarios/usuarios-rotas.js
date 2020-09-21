@@ -1,12 +1,12 @@
 const usuariosControlador = require('./usuarios-controlador');
+const middlewaresAutenticacao = require('./middlewares-autenticacao');
 const passport = require('passport');
 
 module.exports = app => {
   app
     .route('/usuario/login')
     .post(
-      // esse método da autenticação irá executar nossa estratégia de login, definida no estrategias-autenticacao.js
-      passport.authenticate('local', { session: false }),
+      middlewaresAutenticacao.local,
       usuariosControlador.login
     );
   app
