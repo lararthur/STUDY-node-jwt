@@ -48,6 +48,10 @@ module.exports = {
                     return res.status(401).json({ erro: erro.message });
                 }
 
+                if(erro && erro.name === 'TokenExpiredError') {
+                    return res.status(401).json({ erro: erro.message, expiradoEm: erro.expiredAt });
+                }
+
                 // aqui é um erro que não prevemos / não estamos tratando / não previmos. retornar 'genérico' erro 500 :(
                 if(erro) {
                     return res.status(500).json({ erro: erro.message })

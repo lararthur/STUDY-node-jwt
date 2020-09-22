@@ -13,7 +13,7 @@ function criaTokenJWT(usuario) {
   // node -e "console.log(require('crypto').randomBytes(256).toString('base64'))"
 
   // mas esta nova senha estamos guardando no arquivo .env, sendo que aqui utilizamos o 'process' fornecido pelo dotenv.
-  const token = jwt.sign(payload, process.env.CHAVE_JWT);
+  const token = jwt.sign(payload, process.env.CHAVE_JWT, { expiresIn: '15m' });
   return token;
 }
 
