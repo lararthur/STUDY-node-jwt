@@ -4,7 +4,7 @@ const blacklist = require('./blacklist');
 // PORÉM, eles funcionam com callback functions ao invés de primoses.
 // EX.: blacklist.set(meyKey, 'myValue', function(err) => {});
 // por isso, utlilizaremos um método nativo do Node, que fica no módulo util, chamado promisify() para utilizar promises ao inves de callback
-const { promisify } = require('utils');
+const { promisify } = require('util');
 const existsAsyn = promisify(blacklist.exists).bind(blacklist);
 const setAsync = promisify(blacklist.set).bind(blacklist);
 
