@@ -62,6 +62,7 @@ module.exports = {
                 }
 
                 // aqui deu tudo certo :)
+                req.token = info.token;
                 req.user = usuario;
                 return next();
             },
